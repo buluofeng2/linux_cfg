@@ -7,14 +7,14 @@ import numpy as np
 
 
 all_suitcase_json = [
-    # '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/train_all+20240303_suitcase.json',
-    # '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/20240515_vertical_cam_suitcase.json',
-    '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/20240418_test_images_suitcase.json'
+    '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/train_all+20240303_suitcase.json',
+    '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/20240515_vertical_cam_suitcase.json',
+    # '/mnt/lustre/songfaxing/code/HKCustoms/UP/experiments/hkc_20240509/20240418_test_images_suitcase.json'
 ]
 crop_jsons = [
-    # '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/train_all+20240303_suitcase_ips3x.json',
-    # '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/20240515_vertical_cam_suitcase_ips3x.json',
-    '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/20240418_test_images_suitcase_ips3x.json'
+    '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/train_all+20240303_suitcase_ips3x.json',
+    '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/20240515_vertical_cam_suitcase_ips3x.json',
+    # '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/ips_det_json/20240418_test_images_suitcase_ips3x.json'
 ]
 crop_dir = '/mnt/lustre/irdc_rd/HKCustoms/images/ips_crop_images_v2/'
 img_dir = '/mnt/lustre/irdc_rd/HKCustoms/images/'
@@ -132,12 +132,12 @@ def IoU(bboxes, bbox):
     iof = inter_area / boxes1_area
     return iof
 
-def bbox_collision_detection(bboxes, new_bbox, bbox_idx):
+def bbox_collision_detection(bboxes, new_bbox, bbox_idx, collision_thr=0.5):
     if len(bboxes) == 1:
         return False
     rest_bboxes = [b for idx, b in enumerate(bboxes) if idx != bbox_idx]
     iof = IoU(rest_bboxes, new_bbox)
-    collision_flag = np.any(iof >= 0.5)
+    collision_flag = np.any(iof >= collision_thr)
     return collision_flag
 
 for src_json, dst_json in zip(all_suitcase_json, crop_jsons):
@@ -161,13 +161,15 @@ for src_json, dst_json in zip(all_suitcase_json, crop_jsons):
                 crop_img_path = get_new_img_path(img_path, idx)
                 anno = get_new_anno(crop_img_path, bbox, borders)
                 new_box = scale_bbox(bbox, borders)
-                collision_flag = bbox_collision_detection(bboxes, new_box, idx)
+                collision_flag = bbox_collision_detection(bboxes, new_box, idx, collision_thr=0.25)
                 scale_cnt += 1
                 scale_ratio = 0.9 * scale_ratio
                 if collision_flag:
                     continue
                 else:
                     break
+            if collision_flag:
+                continue
             new_annos.append(anno)
             # crop image
             crop_image_with_bbox_for_ips(image, bbox, borders, crop_img_path)
