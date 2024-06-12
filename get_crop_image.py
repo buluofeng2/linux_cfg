@@ -101,6 +101,11 @@ def get_all_bboxes(instances):
         bboxes.append(ins['bbox'])
     return bboxes
 
+def scale_bbox(bbox, border):
+    x1 ,y1 ,x2 ,y2 = bbox
+    l, t, r, b = border
+    return [x1 - l, y1 - t, x2 + r, y2 + b]
+
 def IoU(bboxes, bbox):
     boxes1 = np.array(bboxes)
     boxes2 = np.array([bbox])
@@ -128,6 +133,8 @@ def IoU(bboxes, bbox):
     return iof
 
 def bbox_collision_detection(bboxes, new_bbox, bbox_idx):
+    if len(bboxes) == 1:
+        return False
     rest_bboxes = [b for idx, b in enumerate(bboxes) if idx != bbox_idx]
     iof = IoU(rest_bboxes, new_bbox)
     collision_flag = np.any(iof >= 0.5)
@@ -153,7 +160,7 @@ for src_json, dst_json in zip(all_suitcase_json, crop_jsons):
                 borders = get_borders(bbox, width, height, ratio=scale_ratio, min_ratio=0.02)
                 crop_img_path = get_new_img_path(img_path, idx)
                 anno = get_new_anno(crop_img_path, bbox, borders)
-                new_box = anno['instances'][0]['bbox']
+                new_box = scale_bbox(bbox, borders)
                 collision_flag = bbox_collision_detection(bboxes, new_box, idx)
                 scale_cnt += 1
                 scale_ratio = 0.9 * scale_ratio
