@@ -11,10 +11,10 @@ pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 - `python faceswap.py extract -i /data/src/by.mp4 -o /data/src/faces_by/`
 
 # training
-- `python faceswap.py train -A /data/src/faces/ -B /data/src/faces_by/ -m /data/mn_model/`
+- `python faceswap.py train -A /data/src/faces_xue/ -B /data/src/faces_wandon/ -m /data/mn_model/`
 
 # convert
-- `python faceswap.py convert -i /data/src/douyin.mp4 -o /data/dst/converted/c_douyin -m /data/mn_model/`
+- `python faceswap.py convert -i /data/src/xue.mp4 -o /data/dst/converted/c_xue -m /data/mn_model/`
 
 # generate a video
-- `ffmpeg -i video-frame-%0d.png -c:v libx264 -vf "fps=25,format=yuv420p" /data/dst/converted/c_douyin.mp4
+- `ffmpeg -i /data/dst/converted/c_xue/xue_%0d.png -c:v libx264 -vf "fps=25,format=yuv420p" /data/dst/converted/c_xue.mp4`
