@@ -6,11 +6,15 @@
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 
 # extract image
-- `python faceswap.py extract -i /data/src/douyin.mp4 -o /data/src/faces/`
+- `python faceswap.py extract -i /data/src/xue.mp4 -o /data/src/faces_xue/`
+- `python faceswap.py extract -i /data/src/wandon.mp4 -o /data/src/faces_wandon/`
 - `python faceswap.py extract -i /data/src/by.mp4 -o /data/src/faces_by/`
 
 # training
 - `python faceswap.py train -A /data/src/faces/ -B /data/src/faces_by/ -m /data/mn_model/`
 
 # convert
-- `python faceswap.py convert -i /data/src/douyin.mp4 -o /data/dst/converted/c_douyin.mp4 -m /data/mn_model/`
+- `python faceswap.py convert -i /data/src/douyin.mp4 -o /data/dst/converted/c_douyin -m /data/mn_model/`
+
+# generate a video
+- `ffmpeg -i video-frame-%0d.png -c:v libx264 -vf "fps=25,format=yuv420p" /data/dst/converted/c_douyin.mp4
