@@ -30,6 +30,8 @@ def write_txt_file(list_infos, filepath):
             f.write(str(info) + '\n')
     print(f'Finish write {len(list_infos)} infos into {filepath}.')
 
+
+# copy file
 import shutil
 def copyfile(src_path, dst_path):
     assert os.path.exists(src_path), src_path
@@ -37,3 +39,8 @@ def copyfile(src_path, dst_path):
     os.makedirs(base, exist_ok=True)
     shutil.copy(src_path, dst_path)
     # shutil.copy(src_path, dst_path)  # keep metadata for src file.
+# 遍历文件夹
+for dirpath, dirnames, filenames in os.walk(img_dir):
+    for finename in filenames:
+        if finename.endswith('.jpg'):
+            abs_p = os.path.join(dirpath, filename)
