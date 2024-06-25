@@ -6,7 +6,8 @@
 - `docker cp /home/b/miniconda3/envs/yolo1.7 test:/opt/conda/envs`
 - `docker commit -a 'author' -m 'instruction' <container_name> <image_name>`
 - `pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package`
-
+- `docker push registry.cn-sh-01.sensecore.cn/devsft-ccr-0/hkc_s034:v2`
+- `docker login registry.cn-sh-01.sensecore.cn --username devsft-devsft --password 0JC95x069g`
 # extract image
 - `python faceswap.py extract -i /data/src/xue.mp4 -o /data/src/faces_xue/`
 - `python faceswap.py extract -i /data/src/wandon.mp4 -o /data/src/faces_wandon/`
