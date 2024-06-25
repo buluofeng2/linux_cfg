@@ -3,6 +3,8 @@
 - `docker container stop test`
 - `docker container rm test`
 
+- `docker cp /home/b/miniconda3/envs/yolo1.7 test:/opt/conda/envs`
+
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple some-package
 
 # extract image
