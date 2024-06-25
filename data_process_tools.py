@@ -30,3 +30,10 @@ def write_txt_file(list_infos, filepath):
             f.write(str(info) + '\n')
     print(f'Finish write {len(list_infos)} infos into {filepath}.')
 
+import shutil
+def copyfile(src_path, dst_path):
+    assert os.path.exists(src_path), src_path
+    base, filename = os.path.split(dst_path)
+    os.makedirs(base, exist_ok=True)
+    shutil.copy(src_path, dst_path)
+    # shutil.copy(src_path, dst_path)  # keep metadata for src file.
