@@ -15,6 +15,8 @@ def read_json(filename):
     with open(filename, 'r') as f:
         jd = json.load(f)
         return jd
+
+# write all anno into 1 line.
 def dump_into_file(new_annos, new_json_file):
     base, fname = os.path.split(new_json_file)
     if not os.path.exists(base):
@@ -22,6 +24,26 @@ def dump_into_file(new_annos, new_json_file):
     with open(new_json_file, 'w') as f:
         f.write(json.dumps(new_annos))
     print(f"Write {len(new_annos)} annotations into {new_json_file}.")
+
+# each json in the new_annos list will be write into 1 line.
+def dump_into_file(new_annos, new_json_file):
+    base, fname = os.path.split(new_json_file)
+    if not os.path.exists(base):
+        os.makedirs(base)
+    with open(new_json_file, 'w') as f:
+        for anno in new_annos:
+            f.write(json.dumps(anno) + '\n')
+    print(f"Write {len(new_annos)} annotations into {new_json_file}.")
+
+# write the json into more pretty format
+def dump_into_file(new_annos, new_json_file):
+    base, fname = os.path.split(new_json_file)
+    if not os.path.exists(base):
+        os.makedirs(base)
+    with open(new_json_file, 'w') as f:
+        f.write(json.dumps(new_annos, indent=4))
+    print(f"Write {len(new_annos)} annotations into {new_json_file}.")
+
 def write_txt_file(list_infos, filepath):
     basedir, filename = os.path.split(filepath)
     os.makedirs(basedir, exist_ok=True)
